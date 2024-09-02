@@ -5,6 +5,7 @@ import 'package:chat_app_flutter/features/search/cubit/search_cubit.dart';
 import 'package:chat_app_flutter/firebase_options.dart';
 import 'package:chat_app_flutter/services/authentication/auth_services.dart';
 import 'package:chat_app_flutter/services/firestore/firestore_services.dart';
+import 'package:chat_app_flutter/services/status/status_services.dart';
 import 'package:chat_app_flutter/shared/blocs/auth/auth_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,8 +21,11 @@ import 'features/home/pages/home_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  final appLifecycleObserver = AppLifecycleObserver();
+  appLifecycleObserver.startListening();
 
   runApp(const MyApp());
+
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
@@ -61,8 +65,10 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
               scaffoldBackgroundColor: const Color(0xff181922),
               inputDecorationTheme: InputDecorationTheme(
+                // contentPadding:
+                //     EdgeInsets.symmetric(vertical: 17.h, horizontal: 15.w),
                 contentPadding:
-                    EdgeInsets.symmetric(vertical: 17.h, horizontal: 15.w),
+                    EdgeInsets.symmetric(vertical: 15.h, horizontal: 15.w),
                 border: OutlineInputBorder(
                     borderSide: BorderSide(
                       width: 1.5.w,

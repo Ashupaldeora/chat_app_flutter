@@ -1,4 +1,5 @@
-import 'package:chat_app_flutter/features/home/widgets/receiver_message_card.dart';
+import 'package:chat_app_flutter/features/chat/widgets/receiver_message_card.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';

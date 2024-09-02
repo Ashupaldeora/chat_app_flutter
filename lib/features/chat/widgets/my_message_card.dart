@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ReceiverMessageCard extends StatelessWidget {
-  const ReceiverMessageCard(
+class MyMessageCard extends StatelessWidget {
+  const MyMessageCard(
       {super.key, required this.message, required this.timeSent});
 
   final String message;
@@ -12,39 +12,46 @@ class ReceiverMessageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.centerLeft,
+      alignment: Alignment.centerRight,
       child: Padding(
-        padding: EdgeInsets.only(left: 10.w),
+        padding: EdgeInsets.only(right: 10.r),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
+              // margin: EdgeInsets.only(right: 10.w),
               constraints: BoxConstraints(
                   maxWidth: MediaQuery.of(context).size.width * 0.7),
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+              // alignment: Alignment.center,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.r),
-                color: Colors.grey.shade200,
-              ),
+                  borderRadius: BorderRadius.circular(10.r),
+                  gradient: const LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        Color(0xff9C5EDF),
+                        Color(0xff9C5EDF),
+                        Color(0xff8A42F3),
+                      ])),
               child: Text(
                 message,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(color: Colors.black),
+                style: Theme.of(context).textTheme.bodyMedium,
+                overflow: TextOverflow.clip,
               ),
             ),
             SizedBox(
               height: 4.h,
             ),
             Padding(
-              padding: EdgeInsets.only(left: 4.w),
+              padding: EdgeInsets.only(right: 4.w),
               child: Text(
                 timeSent,
                 style: Theme.of(context)
                     .textTheme
                     .labelSmall!
-                    .copyWith(fontSize: 10.sp, fontWeight: FontWeight.w500),
+                    .copyWith(fontSize: 9.sp, fontWeight: FontWeight.w500),
               ),
             ),
             SizedBox(

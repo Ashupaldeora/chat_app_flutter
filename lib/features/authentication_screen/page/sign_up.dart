@@ -1,16 +1,14 @@
 import 'package:chat_app_flutter/config/route/route_names.dart';
 import 'package:chat_app_flutter/constants.dart';
-import 'package:chat_app_flutter/main.dart';
 import 'package:chat_app_flutter/services/firestore/firestore_services.dart';
 import 'package:chat_app_flutter/shared/blocs/auth/auth_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/text_field.dart';
 
@@ -41,6 +39,9 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leadingWidth: 0,
+        elevation: 0,
+        backgroundColor: const Color(0xff181922),
         title: Text(
           "Sign Up",
           style: Theme.of(context).textTheme.displayMedium,
@@ -49,23 +50,28 @@ class _SignUpState extends State<SignUp> {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
-            Navigator.of(context).pushNamedAndRemoveUntil(
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil(
               RoutesName.home,
               (route) => false,
-            )..then((_) {
-                FireStoreService()
-                    .getUserData(FirebaseAuth.instance.currentUser!.uid);
-              });
+            )
+                .then((_) {
+              FireStoreService()
+                  .getUserData(FirebaseAuth.instance.currentUser!.uid);
+            });
           }
           if (state is AuthFailure) {
             snackBar(context, state.error);
           }
         },
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15.w),
-          child: Form(
-            key: _formKey,
-            child: SingleChildScrollView(
+          padding: EdgeInsets.only(
+            left: 15.w,
+            right: 15.w,
+          ),
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
               child: Column(
                 // mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -114,9 +120,10 @@ class _SignUpState extends State<SignUp> {
                   BlocBuilder<AuthBloc, AuthState>(
                     builder: (context, state) {
                       if (state is AuthLoading) {
-                        return const Center(
-                          child: CircularProgressIndicator(
+                        return Center(
+                          child: LoadingAnimationWidget.fourRotatingDots(
                             color: Color(0xffD227A9),
+                            size: 40,
                           ),
                         );
                       }

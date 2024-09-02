@@ -25,7 +25,7 @@ class CustomUserTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        decoration: BoxDecoration(color: Colors.transparent),
+        decoration: const BoxDecoration(color: Colors.transparent),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -60,7 +60,10 @@ class CustomUserTile extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min, // Keeps Row compact
                   children: [
                     Text(timeSent,
-                        style: Theme.of(context).textTheme.labelSmall),
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelSmall!
+                            .copyWith(fontSize: 10.sp)),
                     SizedBox(width: 8),
                     Icon(
                       Icons.check,

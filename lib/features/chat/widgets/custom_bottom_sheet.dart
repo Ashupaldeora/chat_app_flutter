@@ -1,18 +1,14 @@
 import 'package:chat_app_flutter/features/chat/bloc/chat_bloc.dart';
-import 'package:chat_app_flutter/features/chat/model/message_model.dart';
-import 'package:chat_app_flutter/features/home/widgets/my_message_card.dart';
-import 'package:chat_app_flutter/features/home/widgets/receiver_message_card.dart';
+
 import 'package:chat_app_flutter/services/chat/chat_services.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 
-import '../pages/visiblity_cubit.dart';
+import '../../home/pages/visiblity_cubit.dart';
 import 'chat_message_list.dart';
 
 class CustomBottomSheet {
@@ -69,10 +65,13 @@ class CustomBottomSheet {
                           decoration: InputDecoration(
                             suffixIcon: IconButton(
                                 onPressed: () {
-                                  context.read<ChatBloc>().add(
-                                      ChatSendButtonPressed(
-                                          receiverId: receiverId,
-                                          message: txtMessage.text.trim()));
+                                  final message = txtMessage.text.trim();
+                                  if (message.isNotEmpty) {
+                                    context.read<ChatBloc>().add(
+                                        ChatSendButtonPressed(
+                                            receiverId: receiverId,
+                                            message: txtMessage.text.trim()));
+                                  }
                                   txtMessage.clear();
                                 },
                                 icon: Icon(

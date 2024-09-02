@@ -20,18 +20,15 @@ class MyTextFormField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          height: 10.h,
-        ),
         Text(
           text,
           style: Theme.of(context).textTheme.bodyMedium,
         ),
         SizedBox(
-          height: 5.h,
+          height: 10.h,
         ),
         SizedBox(
-          height: 50.h,
+          height: 60.h,
           child: TextFormField(
             controller: controller,
             style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white)),
@@ -45,12 +42,11 @@ class MyTextFormField extends StatelessWidget {
                 FocusScope.of(context).requestFocus(FocusNode()),
             obscureText: isObscure ?? false,
             validator: (value) {
-              if (value!.isEmpty) {
-                return "$text is required";
-              } else if (text == "Email" &&
-                  !RegExp(r'^[a-zA-Z0-9._%+-]+@gmail\.com$').hasMatch(value)) {
+              if (text == "Email" &&
+                  !RegExp(r'^[a-zA-Z0-9._%+-]+@gmail\.com$').hasMatch(value!) &&
+                  value.isNotEmpty) {
                 return "Please enter a valid email";
-              } else if (text == "Password" && value.length < 6) {
+              } else if (text == "Password" && value!.length < 6) {
                 return 'Password must be at least 6 characters long';
               }
               return null;

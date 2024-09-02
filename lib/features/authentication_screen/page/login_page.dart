@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../../constants.dart';
 import '../../../services/firestore/firestore_services.dart';
@@ -68,9 +69,9 @@ class _LoginPageState extends State<LoginPage> {
         },
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 15.w),
-          child: Form(
-            key: _formKey,
-            child: SingleChildScrollView(
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
               child: Column(
                 // mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -98,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   SizedBox(
-                    height: 10.h,
+                    height: 20.h,
                   ),
                   MyTextFormField(
                     text: "Email",
@@ -117,21 +118,23 @@ class _LoginPageState extends State<LoginPage> {
                   BlocBuilder<AuthBloc, AuthState>(
                     builder: (context, state) {
                       if (state is AuthLoading) {
-                        return const Center(
-                          child: CircularProgressIndicator(
-                            color: Color(0xffD227A9),
-                          ),
+                        return Center(
+                          child: LoadingAnimationWidget.fourRotatingDots(
+                              color: Color(0xffD227A9), size: 40),
                         );
                       }
-                      return CustomButton(
-                        text: 'Log in',
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            context.read<AuthBloc>().add(AuthLoginPressed(
-                                email: txtEmail.text.trim(),
-                                password: txtPassword.text.trim()));
-                          }
-                        },
+                      return Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 30.w),
+                        child: CustomButton(
+                          text: 'Log in',
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              context.read<AuthBloc>().add(AuthLoginPressed(
+                                  email: txtEmail.text.trim(),
+                                  password: txtPassword.text.trim()));
+                            }
+                          },
+                        ),
                       );
                     },
                   ),

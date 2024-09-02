@@ -144,53 +144,53 @@ class ChatServices {
         .collection("chats")
         .snapshots()
         .asyncMap((collection) async {
-      // Fetch all user data in parallel
+      final stopwatch = Stopwatch()..start(); // Start the stopwatch
+
       try {
-        // Debug print to check if documents are being retrieved
-        print('Documents retrieved: ${collection.docs.length}');
+        // Extract userIds from chat documents
+        List<String> userIds = collection.docs
+            .map((doc) => HomeChatModel.fromMap(doc.data()))
+            .map((homeChat) => homeChat.userId)
+            .toList();
 
-        List<Future<HomeChatModel?>> homeChatFutures =
-            collection.docs.map((document) async {
-          try {
-            // Ensure the document data is correct
-            print('Document data: ${document.data()}');
+        // Fetch user data in a single batch request
+        final userSnapshots = await fireStore
+            .collection("users")
+            .where(FieldPath.documentId, whereIn: userIds)
+            .get();
 
-            HomeChatModel homeUser =
-                HomeChatModel.fromMap(document.data() as Map<String, dynamic>);
+        // Map user data to a dictionary for quick lookup
+        Map<String, UserModel> users = {
+          for (var doc in userSnapshots.docs)
+            doc.id: UserModel.fromMap(doc.data())
+        };
 
-            // Fetch user data in parallel
-            var userData =
-                await fireStore.collection("users").doc(homeUser.userId).get();
-
-            if (userData.exists) {
-              UserModel user =
-                  UserModel.fromMap(userData.data() as Map<String, dynamic>);
-
-              return HomeChatModel(
-                name: user.name,
-                lastMessage: homeUser.lastMessage,
-                profilePic: user.profilePic,
-                timeSent: homeUser.timeSent,
-                userId: user.uid,
-              );
-            } else {
-              print('User data not found for ID: ${homeUser.userId}');
-              return null;
-            }
-          } catch (e) {
-            print('Error processing document: $e');
-            return null;
-          }
-        }).toList();
-
-        List<HomeChatModel> homeChats = (await Future.wait(homeChatFutures))
+        // Map chat data to HomeChatModel using the fetched user data
+        List<HomeChatModel> homeChats = collection.docs
+            .map((doc) {
+              HomeChatModel homeUser = HomeChatModel.fromMap(doc.data());
+              UserModel? user = users[homeUser.userId];
+              return user != null
+                  ? HomeChatModel(
+                      name: user.name,
+                      lastMessage: homeUser.lastMessage,
+                      profilePic: user.profilePic,
+                      timeSent: homeUser.timeSent,
+                      userId: user.uid,
+                    )
+                  : null;
+            })
             .whereType<HomeChatModel>()
             .toList();
 
-        print('Home chats: $homeChats'); // Debug print to verify final list
+        stopwatch.stop(); // Stop the stopwatch
+        print('Time taken to fetch chats: ${stopwatch.elapsedMilliseconds} ms');
+
         return homeChats;
       } catch (e) {
         print('Error fetching chats: $e');
+        stopwatch.stop(); // Ensure stopwatch is stopped even in case of error
+        print('Time taken to fetch chats: ${stopwatch.elapsedMilliseconds} ms');
         return [];
       }
     });

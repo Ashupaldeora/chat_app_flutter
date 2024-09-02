@@ -19,34 +19,17 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen>
-    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+    with SingleTickerProviderStateMixin {
   late Animation<Offset> position;
 
   late AnimationController controller;
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    switch (state) {
-      case AppLifecycleState.resumed:
-        FireStoreService().updateIsOnline(true);
-        break;
-      case AppLifecycleState.inactive:
-      case AppLifecycleState.detached:
-      case AppLifecycleState.paused:
-        FireStoreService().updateIsOnline(false);
-        break;
-      case AppLifecycleState.hidden:
-        break;
-    }
-  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     FireStoreService().getReceiverData(widget.receiverUser);
-    WidgetsBinding.instance.addObserver(this);
+
     controller =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
     position = Tween(begin: Offset(0, -2), end: Offset(0, 0))
@@ -63,7 +46,7 @@ class _ChatScreenState extends State<ChatScreen>
   void dispose() {
     // TODO: implement dispose
     controller.dispose();
-    WidgetsBinding.instance.removeObserver(this);
+
     super.dispose();
   }
 
@@ -77,7 +60,7 @@ class _ChatScreenState extends State<ChatScreen>
             height: 40.h,
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.w),
+            padding: EdgeInsets.symmetric(horizontal: 15.w),
             child: StreamBuilder<UserModel>(
                 stream: FireStoreService().getUserDataById(widget.receiverUser),
                 builder: (context, snapshot) {
@@ -99,7 +82,7 @@ class _ChatScreenState extends State<ChatScreen>
                               ? const AssetImage("assets/avatar.png")
                                   as ImageProvider
                               : NetworkImage(snapshot.data!.profilePic),
-                          radius: 25.r, // Example CircleAvatar
+                          radius: 24.r, // Example CircleAvatar
                         ),
                       ),
                       SizedBox(
@@ -117,8 +100,8 @@ class _ChatScreenState extends State<ChatScreen>
                                       Theme.of(context).textTheme.bodyMedium!),
                               Text(
                                   snapshot.data!.isOnline
-                                      ? "online"
-                                      : "offline",
+                                      ? "Online"
+                                      : "Offline",
                                   style: Theme.of(context)
                                       .textTheme
                                       .labelSmall!
@@ -126,7 +109,19 @@ class _ChatScreenState extends State<ChatScreen>
                             ],
                           ),
                         ),
-                      )
+                      ),
+                      IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.phone_outlined,
+                            color: Colors.white,
+                          )),
+                      IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.video_call,
+                            color: Colors.white,
+                          ))
                     ],
                   );
                 }),

@@ -41,10 +41,13 @@ class FireStoreService {
   }
 
   Future<void> updateIsOnline(bool isOnline) async {
-    await _db
-        .collection("users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .update({"isOnline": isOnline});
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) return;
+
+    await _db.collection('users').doc(userId).update({
+      'isOnline': isOnline,
+      'lastActive': FieldValue.serverTimestamp(),
+    });
   }
 
   Stream<UserModel> getUserDataById(String uid) {

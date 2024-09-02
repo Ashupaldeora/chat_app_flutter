@@ -1,22 +1,23 @@
-import 'package:chat_app_flutter/features/authentication_screen/model/user_model.dart';
 import 'package:chat_app_flutter/features/home/model/home_model.dart';
 import 'package:chat_app_flutter/features/home/pages/visiblity_cubit.dart';
-import 'package:chat_app_flutter/features/home/widgets/custom_bottom_sheet.dart';
 import 'package:chat_app_flutter/services/chat/chat_services.dart';
-import 'package:chat_app_flutter/shared/blocs/auth/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../../config/route/route_names.dart';
-import '../widgets/custom_user_tile.dart';
+import '../../chat/widgets/custom_bottom_sheet.dart';
+import '../../chat/widgets/custom_user_tile.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
   final TextEditingController txtMessage = TextEditingController();
+  final GlobalKey<PopupMenuButtonState<String>> _popupMenuKey =
+      GlobalKey<PopupMenuButtonState<String>>();
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +46,12 @@ class HomePage extends StatelessWidget {
                   size: 25.sp,
                 )),
             PopupMenuButton<String>(
+              key: _popupMenuKey,
               onSelected: (value) {
                 if (value == 'signOut') {
-                  context.read<AuthBloc>().add(AuthSignOutPressed());
+                  Future.delayed(Duration(milliseconds: 100), () {
+                    Navigator.of(context).pushNamed(RoutesName.signUp);
+                  });
                 }
               },
               itemBuilder: (context) => [
@@ -110,15 +114,16 @@ class HomePage extends StatelessWidget {
                     stream: ChatServices.chatServices.getHomeChats(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.pink,
-                          ),
+                        return Center(
+                          child: LoadingAnimationWidget.twistingDots(
+                              leftDotColor: const Color(0xffB816D9),
+                              rightDotColor: Colors.white,
+                              size: 40),
                         );
                       }
-                      if (snapshot.data == []) {
+                      if (snapshot.data!.isEmpty) {
                         return const Center(
-                          child: Text("No Messages yet !"),
+                          child: Text("Search users to get started !"),
                         );
                       }
 

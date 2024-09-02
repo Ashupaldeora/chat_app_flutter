@@ -1,13 +1,11 @@
 import 'package:chat_app_flutter/config/route/route_names.dart';
-import 'package:chat_app_flutter/constants.dart';
-import 'package:chat_app_flutter/features/authentication_screen/page/login_page.dart';
-import 'package:chat_app_flutter/features/home/model/home_model.dart';
-import 'package:chat_app_flutter/features/home/widgets/custom_bottom_sheet.dart';
 import 'package:chat_app_flutter/features/search/cubit/search_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../chat/widgets/custom_bottom_sheet.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -32,8 +30,8 @@ class _SearchPageState extends State<SearchPage> {
                 IconButton(
                     padding: EdgeInsets.zero,
                     onPressed: () {
-                      Navigator.of(context).pop();
                       context.read<SearchCubit>().clearSearch();
+                      Navigator.of(context).pop();
                     },
                     icon: Icon(
                       Icons.arrow_back_ios_new,
@@ -48,8 +46,8 @@ class _SearchPageState extends State<SearchPage> {
                         color: Colors.transparent,
                         child: TextField(
                           autofocus: true,
-                          // Keep this false to manually control focus
                           onChanged: (value) {
+                            print("Value changed: '$value'"); // Debugging
                             context.read<SearchCubit>().searchUsers(value);
                           },
                           style: GoogleFonts.lato(
@@ -78,14 +76,14 @@ class _SearchPageState extends State<SearchPage> {
             ),
             Expanded(child: BlocBuilder<SearchCubit, SearchInitial>(
                 builder: (context, state) {
+              if (state.filteredUsers.isEmpty) {
+                return const Center(
+                  child: Text("Search users"),
+                );
+              }
               return ListView.builder(
-                itemCount: state.users.length,
+                itemCount: state.filteredUsers.length,
                 itemBuilder: (context, index) {
-                  if (state.filteredUsers.isEmpty) {
-                    return const Center(
-                      child: Text("Search users"),
-                    );
-                  }
                   final user = state.filteredUsers[index];
                   return Hero(
                     tag: user.uid,
