@@ -86,16 +86,21 @@ class _SignUpState extends State<SignUp> {
                   SizedBox(
                     height: 20.h,
                   ),
-                  Container(
-                    // height: 27.h,
-                    // width: 30.w,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
-                    child: SvgPicture.asset(
-                      "assets/svg/google.svg",
-                      fit: BoxFit.cover,
-                      height: 25.h,
+                  GestureDetector(
+                    onTap: () {
+                      context.read<AuthBloc>().add(AuthGoogleSignInPressed());
+                    },
+                    child: Container(
+                      // height: 27.h,
+                      // width: 30.w,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      child: SvgPicture.asset(
+                        "assets/svg/google.svg",
+                        fit: BoxFit.cover,
+                        height: 25.h,
+                      ),
                     ),
                   ),
                   MyTextFormField(

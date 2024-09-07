@@ -4,10 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MyMessageCard extends StatelessWidget {
   const MyMessageCard(
-      {super.key, required this.message, required this.timeSent});
+      {super.key,
+      required this.message,
+      required this.timeSent,
+      required this.isSeen});
 
   final String message;
   final String timeSent;
+
+  final bool isSeen;
 
   @override
   Widget build(BuildContext context) {
@@ -44,15 +49,25 @@ class MyMessageCard extends StatelessWidget {
             SizedBox(
               height: 4.h,
             ),
-            Padding(
-              padding: EdgeInsets.only(right: 4.w),
-              child: Text(
-                timeSent,
-                style: Theme.of(context)
-                    .textTheme
-                    .labelSmall!
-                    .copyWith(fontSize: 9.sp, fontWeight: FontWeight.w500),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(right: 4.w),
+                  child: Text(
+                    timeSent,
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelSmall!
+                        .copyWith(fontSize: 9.sp, fontWeight: FontWeight.w500),
+                  ),
+                ),
+                Icon(
+                  isSeen ? Icons.done_all : Icons.done,
+                  size: 11.sp,
+                  color: isSeen ? const Color(0xff9C5EDF) : Colors.grey,
+                )
+              ],
             ),
             SizedBox(
               height: 10.h,

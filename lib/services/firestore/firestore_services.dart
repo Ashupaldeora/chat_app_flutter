@@ -16,9 +16,12 @@ class FireStoreService {
 
   Future<UserModel?> getUserData(String uid) async {
     DocumentSnapshot doc = await _db.collection('users').doc(uid).get();
-    UserModel user = UserModel.fromMap(doc.data() as Map<String, dynamic>);
-    currentUserData = user;
-    return user;
+    if (doc.exists) {
+      UserModel user = UserModel.fromMap(doc.data() as Map<String, dynamic>);
+      currentUserData = user;
+      return user;
+    }
+    return null;
   }
 
   Future<List<UserModel>> getAllUsersExcludingLoggedIn(

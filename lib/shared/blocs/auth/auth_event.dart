@@ -30,3 +30,9 @@ final class AuthSignOutPressed extends AuthEvent {
   // TODO: implement props
   List<Object?> get props => throw UnimplementedError();
 }
+
+final class AuthGoogleSignInPressed extends AuthEvent {
+  @override
+  // TODO: implement props
+  List<Object?> get props => throw UnimplementedError();
+}

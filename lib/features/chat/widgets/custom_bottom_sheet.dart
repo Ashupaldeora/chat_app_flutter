@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../home/pages/visiblity_cubit.dart';
+import '../../home/cubit/visibility_cubit.dart';
 import 'chat_message_list.dart';
 
 class CustomBottomSheet {
@@ -24,8 +24,6 @@ class CustomBottomSheet {
       isScrollControlled: true,
       barrierColor: Colors.transparent,
       builder: (BuildContext context) {
-        final chatStream = ChatServices.chatServices.getChats(receiverId);
-
         return Container(
           height: MediaQuery.of(context).size.height * 0.80,
           width: double.infinity,
@@ -60,24 +58,40 @@ class CustomBottomSheet {
                       Expanded(
                         child: TextField(
                           controller: txtMessage,
+                          maxLines: null,
                           style: GoogleFonts.lato(
                               textStyle: const TextStyle(color: Colors.black)),
                           decoration: InputDecoration(
-                            suffixIcon: IconButton(
-                                onPressed: () {
-                                  final message = txtMessage.text.trim();
-                                  if (message.isNotEmpty) {
-                                    context.read<ChatBloc>().add(
-                                        ChatSendButtonPressed(
-                                            receiverId: receiverId,
-                                            message: txtMessage.text.trim()));
-                                  }
-                                  txtMessage.clear();
-                                },
-                                icon: Icon(
-                                  Icons.send,
-                                  color: Colors.grey.shade500,
-                                )),
+                            suffixIcon: SizedBox(
+                              width: 80.w,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(
+                                        Icons.image,
+                                        color: Colors.grey.shade500,
+                                      )),
+                                  IconButton(
+                                      onPressed: () {
+                                        final message = txtMessage.text.trim();
+                                        if (message.isNotEmpty) {
+                                          context.read<ChatBloc>().add(
+                                              ChatSendButtonPressed(
+                                                  receiverId: receiverId,
+                                                  message:
+                                                      txtMessage.text.trim()));
+                                        }
+                                        txtMessage.clear();
+                                      },
+                                      icon: Icon(
+                                        Icons.send,
+                                        color: Colors.grey.shade500,
+                                      )),
+                                ],
+                              ),
+                            ),
                             filled: true,
                             fillColor: const Color(0xffF7F7F7),
                             hintText: "Type here",
@@ -101,9 +115,9 @@ class CustomBottomSheet {
                       ),
                       IconButton(
                           onPressed: () async {},
-                          icon: const Icon(
-                            Icons.more_horiz,
-                            color: Colors.black,
+                          icon: Icon(
+                            Icons.mic,
+                            color: Colors.grey.shade500,
                           ))
                     ],
                   ),

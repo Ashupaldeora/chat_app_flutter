@@ -65,9 +65,21 @@ class _ChatMessagesListState extends State<ChatMessagesList> {
           itemBuilder: (context, index) {
             final message = snapshot.data![index];
             final timeSent = DateFormat.Hm().format(message.timeSent);
+            if (!message.isSeen &&
+                message.receiverId == FirebaseAuth.instance.currentUser!.uid) {
+              print(widget.receiverId);
+              print(message.receiverId);
+              ChatServices.chatServices.updateChatIsSeen(
+                message.messageId,
+                widget.receiverId,
+              );
+            }
             if (message.senderId == FirebaseAuth.instance.currentUser!.uid) {
               return MyMessageCard(
-                  message: message.message, timeSent: timeSent);
+                message: message.message,
+                timeSent: timeSent,
+                isSeen: message.isSeen,
+              );
             } else {
               return ReceiverMessageCard(
                   message: message.message, timeSent: timeSent);

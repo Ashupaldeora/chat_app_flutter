@@ -1,5 +1,5 @@
 import 'package:chat_app_flutter/features/home/model/home_model.dart';
-import 'package:chat_app_flutter/features/home/pages/visiblity_cubit.dart';
+import 'package:chat_app_flutter/features/home/cubit/visibility_cubit.dart';
 import 'package:chat_app_flutter/services/chat/chat_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,10 +7,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-
 import '../../../config/route/route_names.dart';
 import '../../chat/widgets/custom_bottom_sheet.dart';
-import '../../chat/widgets/custom_user_tile.dart';
+import '../widgets/custom_user_tile.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -140,6 +139,8 @@ class HomePage extends StatelessWidget {
                                   lastMessage: homeChatDetails.lastMessage,
                                   name: homeChatDetails.name,
                                   profilePic: homeChatDetails.profilePic,
+                                  numberOfUnseenMessages:
+                                      homeChatDetails.numberOfNotSeenMessages,
                                   timeSent: DateFormat.Hm()
                                       .format(homeChatDetails.timeSent),
                                   onTap: () {

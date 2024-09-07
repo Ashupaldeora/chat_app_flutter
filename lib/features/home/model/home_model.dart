@@ -6,13 +6,15 @@ class HomeChatModel {
   final String profilePic;
   final DateTime timeSent;
   final String userId;
+  final int numberOfNotSeenMessages;
 
   HomeChatModel(
       {required this.name,
       required this.lastMessage,
       required this.profilePic,
       required this.timeSent,
-      required this.userId});
+      required this.userId,
+      required this.numberOfNotSeenMessages});
 
   Map<String, dynamic> toMap() {
     return {
@@ -20,7 +22,8 @@ class HomeChatModel {
       'lastMessage': lastMessage,
       'profilePic': profilePic,
       'timeSent': timeSent,
-      'userId': userId
+      'userId': userId,
+      'numberOfNotSeenMessages': numberOfNotSeenMessages
     };
   }
 
@@ -30,6 +33,26 @@ class HomeChatModel {
         lastMessage: map['lastMessage'] as String,
         profilePic: map['profilePic'] as String,
         timeSent: (map['timeSent'] as Timestamp).toDate(),
+        numberOfNotSeenMessages: map['numberOfNotSeenMessages'],
         userId: map['userId'] as String);
+  }
+
+  HomeChatModel copyWith({
+    String? name,
+    String? lastMessage,
+    String? profilePic,
+    DateTime? timeSent,
+    String? userId,
+    int? numberOfNotSeenMessages,
+  }) {
+    return HomeChatModel(
+      name: name ?? this.name,
+      lastMessage: lastMessage ?? this.lastMessage,
+      profilePic: profilePic ?? this.profilePic,
+      timeSent: timeSent ?? this.timeSent,
+      userId: userId ?? this.userId,
+      numberOfNotSeenMessages:
+          numberOfNotSeenMessages ?? this.numberOfNotSeenMessages,
+    );
   }
 }

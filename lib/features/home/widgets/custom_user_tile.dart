@@ -11,6 +11,7 @@ class CustomUserTile extends StatelessWidget {
     required this.lastMessage,
     required this.name,
     required this.timeSent,
+    required this.numberOfUnseenMessages,
   });
 
   final String hero;
@@ -19,6 +20,7 @@ class CustomUserTile extends StatelessWidget {
   final String lastMessage;
   final String name;
   final String timeSent;
+  final int numberOfUnseenMessages;
 
   @override
   Widget build(BuildContext context) {
@@ -46,16 +48,30 @@ class CustomUserTile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(name, style: Theme.of(context).textTheme.bodyMedium!),
-                  Text(lastMessage,
-                      style: Theme.of(context).textTheme.labelSmall),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    lastMessage,
+                    style: Theme.of(context).textTheme.labelSmall,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ],
               ),
+            ),
+            const SizedBox(
+              width: 5,
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
               // Align trailing text vertically with subtitle
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                if (numberOfUnseenMessages > 0)
+                  Badge(
+                    backgroundColor: Color(0xffB816D9),
+                    label: Text(numberOfUnseenMessages.toString()),
+                  ),
                 Row(
                   mainAxisSize: MainAxisSize.min, // Keeps Row compact
                   children: [
@@ -64,7 +80,7 @@ class CustomUserTile extends StatelessWidget {
                             .textTheme
                             .labelSmall!
                             .copyWith(fontSize: 10.sp)),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Icon(
                       Icons.check,
                       color: Colors.grey.shade600,

@@ -45,3 +45,18 @@ Future<List<HomeChatModel>> searchUsers(String query) async {
       .map((doc) => HomeChatModel.fromMap(doc.data() as Map<String, dynamic>))
       .toList();
 }
+
+String capitalizeWords(String str) {
+  if (str.isEmpty) return str;
+
+  // Split the string into individual words
+  List<String> words = str.split(' ');
+
+  // Capitalize the first letter of each word and join them back together
+  String capitalized = words.map((word) {
+    if (word.isEmpty) return word;
+    return word[0].toUpperCase() + word.substring(1);
+  }).join(' ');
+
+  return capitalized;
+}

@@ -1,6 +1,6 @@
 import 'package:chat_app_flutter/features/authentication_screen/page/sign_up.dart';
 import 'package:chat_app_flutter/features/chat/bloc/chat_bloc.dart';
-import 'package:chat_app_flutter/features/home/pages/visiblity_cubit.dart';
+import 'package:chat_app_flutter/features/home/cubit/visibility_cubit.dart';
 import 'package:chat_app_flutter/features/search/cubit/search_cubit.dart';
 import 'package:chat_app_flutter/firebase_options.dart';
 import 'package:chat_app_flutter/services/authentication/auth_services.dart';
