@@ -1,5 +1,9 @@
+import 'dart:developer';
+
+import 'package:chat_app_flutter/constants.dart';
 import 'package:chat_app_flutter/features/home/model/home_model.dart';
-import 'package:chat_app_flutter/features/home/cubit/visibility_cubit.dart';
+import 'package:chat_app_flutter/features/home/cubit/visibility_cubit/visibility_cubit.dart';
+import 'package:chat_app_flutter/services/authentication/auth_services.dart';
 import 'package:chat_app_flutter/services/chat/chat_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,12 +15,32 @@ import '../../../config/route/route_names.dart';
 import '../../chat/widgets/custom_bottom_sheet.dart';
 import '../widgets/custom_user_tile.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final TextEditingController txtMessage = TextEditingController();
+
   final GlobalKey<PopupMenuButtonState<String>> _popupMenuKey =
       GlobalKey<PopupMenuButtonState<String>>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (AuthServices.authServices.isNewUser) {
+        Future.delayed(const Duration(milliseconds: 200), () {
+          showProfileDialog(context);
+          log("dialog opened");
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +62,9 @@ class HomePage extends StatelessWidget {
           ),
           actions: [
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  showProfileDialog(context);
+                },
                 icon: Icon(
                   Icons.add,
                   color: Colors.white,
@@ -46,21 +72,46 @@ class HomePage extends StatelessWidget {
                 )),
             PopupMenuButton<String>(
               key: _popupMenuKey,
+              color: const Color(0xff232532),
+              elevation: 1,
+              iconColor: Colors.white,
               onSelected: (value) {
                 if (value == 'signOut') {
-                  Future.delayed(Duration(milliseconds: 100), () {
+                  Future.delayed(const Duration(milliseconds: 300), () {
                     Navigator.of(context).pushNamed(RoutesName.signUp);
                   });
                 }
+                if (value == 'Profile') {
+                  Navigator.of(context).pushNamed(RoutesName.profile);
+                }
               },
               itemBuilder: (context) => [
-                const PopupMenuItem<String>(
+                PopupMenuItem<String>(
+                  value: 'Profile',
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.account_circle,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        'Profile',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
+                ),
+                PopupMenuItem<String>(
                   value: 'signOut',
                   child: Row(
                     children: [
-                      Icon(Icons.logout),
+                      const Icon(Icons.logout, color: Colors.white),
                       SizedBox(width: 8),
-                      Text('Sign Out'),
+                      Text(
+                        'Sign Out',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
                     ],
                   ),
                 ),

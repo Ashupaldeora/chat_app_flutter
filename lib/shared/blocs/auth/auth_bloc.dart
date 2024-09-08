@@ -30,7 +30,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final name = capitalizeWords(event.name);
         UserModel userData = UserModel(
             email: user.email!,
-            profilePic: "",
+            profilePic: Constants.defaultProfileImage,
             name: name,
             uid: user.uid,
             isOnline: true,
@@ -72,7 +72,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final name = capitalizeWords(user.displayName!);
         UserModel userData = UserModel(
             email: user.email!,
-            profilePic: "",
+            profilePic: user.photoURL!,
             name: name,
             uid: user.uid,
             isOnline: true,

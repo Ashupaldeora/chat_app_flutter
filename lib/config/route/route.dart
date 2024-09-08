@@ -2,6 +2,7 @@ import 'package:chat_app_flutter/config/route/route_names.dart';
 import 'package:chat_app_flutter/features/chat/page/chat_page.dart';
 
 import 'package:chat_app_flutter/features/home/pages/home_page.dart';
+import 'package:chat_app_flutter/features/profile/page/profile_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -40,6 +41,10 @@ class Routes {
         );
       case RoutesName.search:
         return MaterialPageRoute(builder: (context) => const SearchPage());
+
+      case RoutesName.profile:
+        return MaterialPageRoute(builder: (context) => ProfilePage());
+
       default:
         return MaterialPageRoute(
           builder: (context) => const SignUp(),

@@ -77,12 +77,26 @@ class _ChatScreenState extends State<ChatScreen>
                     children: [
                       Hero(
                         tag: widget.hero,
-                        child: CircleAvatar(
-                          backgroundImage: snapshot.data!.profilePic == ""
-                              ? const AssetImage("assets/avatar.png")
-                                  as ImageProvider
-                              : NetworkImage(snapshot.data!.profilePic),
-                          radius: 24.r, // Example CircleAvatar
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              colors: [
+                                Color(0xffB24DDA),
+                                Color(0xffCE7F45),
+                              ], // Gradient colors
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                          ),
+                          child: CircleAvatar(
+                            backgroundImage: snapshot.data!.profilePic == ""
+                                ? const AssetImage("assets/avatar.png")
+                                    as ImageProvider
+                                : NetworkImage(snapshot.data!.profilePic),
+                            radius: 24.r, // Example CircleAvatar
+                          ),
                         ),
                       ),
                       SizedBox(

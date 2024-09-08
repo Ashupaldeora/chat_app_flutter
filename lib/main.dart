@@ -1,6 +1,8 @@
 import 'package:chat_app_flutter/features/authentication_screen/page/sign_up.dart';
 import 'package:chat_app_flutter/features/chat/bloc/chat_bloc.dart';
-import 'package:chat_app_flutter/features/home/cubit/visibility_cubit.dart';
+
+import 'package:chat_app_flutter/features/home/cubit/visibility_cubit/visibility_cubit.dart';
+
 import 'package:chat_app_flutter/features/search/cubit/search_cubit.dart';
 import 'package:chat_app_flutter/firebase_options.dart';
 import 'package:chat_app_flutter/services/authentication/auth_services.dart';
@@ -17,6 +19,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'config/route/route.dart';
 import 'features/home/pages/home_page.dart';
+import 'features/profile/cubit/profile_cubit/profile_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,6 +60,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) =>
               SearchCubit(FirebaseAuth.instance.currentUser!.uid)..loadUsers(),
+        ),
+        BlocProvider(
+          create: (context) => ProfileCubit(),
         ),
       ],
       child: ScreenUtilInit(

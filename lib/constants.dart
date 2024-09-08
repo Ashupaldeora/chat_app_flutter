@@ -1,7 +1,20 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:chat_app_flutter/features/home/model/home_model.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
+
+import 'features/profile/cubit/profile_cubit/profile_cubit.dart';
+
+class Constants {
+  static const String defaultProfileImage =
+      "https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper-thumbnail.png";
+}
 
 void snackBar(BuildContext context, String text) {
   ScaffoldMessenger.of(context).showSnackBar(
@@ -59,4 +72,131 @@ String capitalizeWords(String str) {
   }).join(' ');
 
   return capitalized;
+}
+
+void showProfileDialog(BuildContext context) {
+  showGeneralDialog(
+    context: context,
+
+    barrierDismissible: true,
+    barrierLabel: '',
+    barrierColor: Colors.black.withOpacity(0.5),
+    // Dim the background
+    transitionDuration: Duration(milliseconds: 500),
+    pageBuilder: (context, animation, secondaryAnimation) {
+      return Align(
+        alignment: Alignment.center,
+        child: ScaleTransition(
+          scale: Tween<double>(begin: 0.8, end: 1.0).animate(
+            CurvedAnimation(parent: animation, curve: Curves.easeOut),
+          ),
+          child: FadeTransition(
+            opacity: Tween<double>(begin: 0, end: 1).animate(
+              CurvedAnimation(parent: animation, curve: Curves.easeIn),
+            ),
+            child: AlertDialog(
+              title: Text(
+                "Change Profile Picture",
+                style: Theme.of(context).textTheme.displayMedium,
+              ),
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Stack(
+                    fit: StackFit.loose,
+                    children: [
+                      BlocBuilder<ProfileCubit, ProfileState>(
+                        builder: (context, state) {
+                          return CircleAvatar(
+                            radius: 60.r,
+                            backgroundImage: state.imageFile != null
+                                ? FileImage(state.imageFile!) as ImageProvider
+                                : NetworkImage(state.imageUrl!),
+                          );
+                        },
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: -10.w,
+                        child: MaterialButton(
+                          elevation: 1,
+                          onPressed: () {
+                            context.read<ProfileCubit>().pickImagePressed();
+                          },
+                          color: Colors.white,
+                          shape: CircleBorder(),
+                          child: const Icon(
+                            Icons.edit,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    "Later",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: Color(0xffD227A9), fontSize: 13.sp),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    context.read<ProfileCubit>().setProfilePicture();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    "Set",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: Color(0xffD227A9), fontSize: 13.sp),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+    transitionBuilder: (context, animation, secondaryAnimation, child) {
+      return FadeTransition(
+        opacity: Tween<double>(begin: 0, end: 1).animate(
+          CurvedAnimation(parent: animation, curve: Curves.easeIn),
+        ),
+        child: ScaleTransition(
+          scale: Tween<double>(begin: 0.8, end: 1.0).animate(
+            CurvedAnimation(parent: animation, curve: Curves.easeOut),
+          ),
+          child: child,
+        ),
+      );
+    },
+  );
+}
+
+Future<File?> pickImage() async {
+  File? image;
+  XFile? xFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+  try {
+    if (xFile != null) {
+      image = File(xFile.path);
+    }
+  } catch (e) {
+    log(e.toString());
+  }
+  return image;
 }

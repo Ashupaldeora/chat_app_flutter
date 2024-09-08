@@ -36,4 +36,22 @@ class UserModel {
       ),
     );
   }
+
+  UserModel copyWith({
+    String? email,
+    String? profilePic,
+    String? name,
+    String? uid,
+    bool? isOnline,
+    List<String>? searchableKeywords,
+  }) {
+    return UserModel(
+      email: email ?? this.email,
+      profilePic: profilePic ?? this.profilePic,
+      name: name ?? this.name,
+      uid: uid ?? this.uid,
+      isOnline: isOnline ?? this.isOnline,
+      searchableKeywords: searchableKeywords ?? this.searchableKeywords,
+    );
+  }
 }

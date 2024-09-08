@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../home/cubit/visibility_cubit.dart';
+import '../../home/cubit/visibility_cubit/visibility_cubit.dart';
 import 'chat_message_list.dart';
 
 class CustomBottomSheet {

@@ -15,43 +15,6 @@ class ChatServices {
 
   ChatServices._();
 
-  // Future<void> sendTextMessage(
-  //   UserModel sender,
-  //   String receiverId,
-  //   String message,
-  // ) async {
-  //   try {
-  //     final stopwatch = Stopwatch()..start();
-  //     print("started");
-  //     //create unique message id
-  //     String messageId = const Uuid().v1();
-  //     var time = DateTime.now();
-  //     //getting receiver data with receiver id
-  //     final receiverModel = FireStoreService.receiverUserData;
-  //
-  //     //creating userModel of receiver from received receiver data
-  //
-  //     stopwatch.stop();
-  //     print('sendTextMessage duration: ${stopwatch.elapsedMilliseconds}ms');
-  //     //method to save messages to database
-  //     _saveMessageToSubCollection(
-  //         senderId: sender.uid,
-  //         receiverId: receiverId,
-  //         message: message,
-  //         messageId: messageId,
-  //         timeSent: time);
-  //     // method to save last send message to database
-  //
-  //     print("uploaded to db");
-  //     _saveLastSendMessage(
-  //         receiver: receiverModel!,
-  //         sender: sender,
-  //         lastMessage: message,
-  //         timeSent: time);
-  //   } catch (e) {
-  //     log(e.toString() + "this error cause here");
-  //   }
-  // }
   Future<void> sendTextMessage(
     UserModel sender,
     String receiverId,

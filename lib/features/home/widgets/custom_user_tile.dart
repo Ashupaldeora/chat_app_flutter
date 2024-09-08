@@ -33,11 +33,20 @@ class CustomUserTile extends StatelessWidget {
           children: [
             Hero(
               tag: hero,
-              child: CircleAvatar(
-                backgroundImage: (profilePic == "")
-                    ? const AssetImage("assets/avatar.png") as ImageProvider
-                    : NetworkImage(profilePic),
-                radius: 22.r, // Example CircleAvatar
+              child: Container(
+                padding: const EdgeInsets.all(1.5),
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    colors: [Colors.pink, Colors.purple], // Gradient colors
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(profilePic),
+                  radius: 22.r, // Example CircleAvatar
+                ),
               ),
             ),
             SizedBox(width: 15.w),

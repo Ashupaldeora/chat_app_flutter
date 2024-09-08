@@ -60,4 +60,22 @@ class FireStoreService {
         .snapshots()
         .map((e) => UserModel.fromMap(e.data()!));
   }
+
+  Future<void> updateProfile(String uid, String image) async {
+    log("updateProfile : $uid");
+    log("updateProfile : $image");
+    await _db.collection("users").doc(uid).update({'profilePic': image});
+    log("image updated");
+    currentUserData?.copyWith(profilePic: image);
+  }
+
+  Future<void> updateUserData(String uid, String image, String name) async {
+    log("updateProfile : $uid");
+    log("updateProfile : $image");
+    await _db
+        .collection("users")
+        .doc(uid)
+        .update({'profilePic': image, 'name': name});
+    log("user updated");
+  }
 }

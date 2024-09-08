@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chat_app_flutter/config/route/route_names.dart';
 import 'package:chat_app_flutter/constants.dart';
 import 'package:chat_app_flutter/services/firestore/firestore_services.dart';
@@ -48,17 +50,14 @@ class _SignUpState extends State<SignUp> {
         ),
       ),
       body: BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state is AuthSuccess) {
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil(
+            await FireStoreService()
+                .getUserData(FirebaseAuth.instance.currentUser!.uid);
+            Navigator.of(context).pushNamedAndRemoveUntil(
               RoutesName.home,
               (route) => false,
-            )
-                .then((_) {
-              FireStoreService()
-                  .getUserData(FirebaseAuth.instance.currentUser!.uid);
-            });
+            );
           }
           if (state is AuthFailure) {
             snackBar(context, state.error);
