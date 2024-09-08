@@ -5,6 +5,7 @@ import 'package:chat_app_flutter/features/home/model/home_model.dart';
 import 'package:chat_app_flutter/features/home/cubit/visibility_cubit/visibility_cubit.dart';
 import 'package:chat_app_flutter/services/authentication/auth_services.dart';
 import 'package:chat_app_flutter/services/chat/chat_services.dart';
+import 'package:chat_app_flutter/services/firestore/firestore_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,8 +35,14 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (AuthServices.authServices.isNewUser) {
-        Future.delayed(const Duration(milliseconds: 200), () {
-          showProfileDialog(context);
+        Future.delayed(const Duration(milliseconds: 700), () {
+          if (FireStoreService.currentUserData != null) {
+            showProfileDialog(context);
+          } else {
+            Future.delayed(const Duration(milliseconds: 300), () {
+              showProfileDialog(context);
+            });
+          }
           log("dialog opened");
         });
       }

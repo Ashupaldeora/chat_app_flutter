@@ -13,3 +13,20 @@ final class ProfileState extends Equatable {
 }
 
 final class ProfileLoading extends ProfileState {}
+
+final class ProfileUpdateSuccess extends ProfileState {
+  const ProfileUpdateSuccess(
+      {required String super.imageUrl,
+      required super.imageFile,
+      required String super.name});
+}
+
+final class ProfileUpdateFailure extends ProfileState {
+  final String error;
+
+  const ProfileUpdateFailure(this.error);
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [error];
+}

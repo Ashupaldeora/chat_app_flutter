@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:chat_app_flutter/features/home/model/home_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -77,5 +78,23 @@ class FireStoreService {
         .doc(uid)
         .update({'profilePic': image, 'name': name});
     log("user updated");
+  }
+
+  // Method to get the reference to the chat document in Firestore
+  DocumentReference getChatDocRef(String receiverId, String userId) {
+    return _db
+        .collection('users')
+        .doc(receiverId) // receiver's id
+        .collection('chats')
+        .doc(userId); // current user's id
+  }
+
+  Future<List<HomeChatModel>> getUserChats(String uid) async {
+    var chatSnapshots =
+        await _db.collection('users').doc(uid).collection('chats').get();
+
+    return chatSnapshots.docs
+        .map((doc) => HomeChatModel.fromMap(doc.data()))
+        .toList();
   }
 }

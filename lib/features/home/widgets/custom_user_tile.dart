@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomUserTile extends StatelessWidget {
   const CustomUserTile({
@@ -43,9 +42,16 @@ class CustomUserTile extends StatelessWidget {
                     end: Alignment.bottomRight,
                   ),
                 ),
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage(profilePic),
-                  radius: 22.r, // Example CircleAvatar
+                child: Container(
+                  padding: const EdgeInsets.all(3.5),
+                  decoration: const BoxDecoration(
+                    color: Colors.black,
+                    shape: BoxShape.circle,
+                  ),
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage(profilePic),
+                    radius: 22.r, // Example CircleAvatar
+                  ),
                 ),
               ),
             ),
@@ -78,7 +84,7 @@ class CustomUserTile extends StatelessWidget {
               children: [
                 if (numberOfUnseenMessages > 0)
                   Badge(
-                    backgroundColor: Color(0xffB816D9),
+                    backgroundColor: const Color(0xffB816D9),
                     label: Text(numberOfUnseenMessages.toString()),
                   ),
                 Row(

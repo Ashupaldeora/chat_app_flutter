@@ -58,10 +58,10 @@ class _LoginPageState extends State<LoginPage> {
             Navigator.of(context).pushNamedAndRemoveUntil(
               RoutesName.home,
               (route) => false,
-            )..then((_) {
-                FireStoreService()
-                    .getUserData(FirebaseAuth.instance.currentUser!.uid);
-              });
+            );
+
+            FireStoreService()
+                .getUserData(FirebaseAuth.instance.currentUser!.uid);
           }
           if (state is AuthFailure) {
             snackBar(context, state.error);

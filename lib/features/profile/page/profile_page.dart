@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../cubit/profile_cubit/profile_cubit.dart';
@@ -65,7 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         Container(
                           height: 180,
                           width: 180,
-                          padding: EdgeInsets.all(3),
+                          padding: const EdgeInsets.all(3),
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             gradient: LinearGradient(
@@ -77,35 +78,40 @@ class _ProfilePageState extends State<ProfilePage> {
                               end: Alignment.bottomRight,
                             ),
                           ),
-                          child: ClipOval(
-                            child: state.imageFile != null
-                                ? SizedBox(
-                                    height: 170,
-                                    width: 170,
-                                    child: Image.file(state.imageFile!),
-                                  )
-                                : CachedNetworkImage(
-                                    height: 170,
-                                    width: 170,
-                                    fit: BoxFit.cover,
-                                    placeholder: (context, url) =>
-                                        Shimmer.fromColors(
-                                      baseColor: Colors.grey[500]!,
-                                      highlightColor: Colors.grey[100]!,
-                                      enabled: true,
-                                      child: Container(
-                                        height: 170,
-                                        width: 170,
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.white,
+                          child: Container(
+                            padding: const EdgeInsets.all(3),
+                            decoration: const BoxDecoration(
+                                shape: BoxShape.circle, color: Colors.black),
+                            child: ClipOval(
+                              child: state.imageFile != null
+                                  ? SizedBox(
+                                      height: 170,
+                                      width: 170,
+                                      child: Image.file(state.imageFile!),
+                                    )
+                                  : CachedNetworkImage(
+                                      height: 170,
+                                      width: 170,
+                                      fit: BoxFit.cover,
+                                      placeholder: (context, url) =>
+                                          Shimmer.fromColors(
+                                        baseColor: Colors.grey[500]!,
+                                        highlightColor: Colors.grey[100]!,
+                                        enabled: true,
+                                        child: Container(
+                                          height: 170,
+                                          width: 170,
+                                          decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
+                                      imageUrl: state.imageUrl ??
+                                          FireStoreService
+                                              .currentUserData!.profilePic,
                                     ),
-                                    imageUrl: state.imageUrl ??
-                                        FireStoreService
-                                            .currentUserData!.profilePic,
-                                  ),
+                            ),
                           ),
                         ),
                         Positioned(
@@ -131,7 +137,7 @@ class _ProfilePageState extends State<ProfilePage> {
               BlocBuilder<ProfileCubit, ProfileState>(
                 buildWhen: (previous, current) => (previous != current),
                 builder: (context, state) {
-                  txtName.text = state.name!;
+                  txtName.text = state.name ?? "";
                   return TextField(
                     controller: txtName,
                     style: GoogleFonts.lato(
@@ -163,12 +169,48 @@ class _ProfilePageState extends State<ProfilePage> {
                     FocusScope.of(context).requestFocus(FocusNode()),
               ),
               const Spacer(),
-              CustomButton(
-                text: "Save",
-                onPressed: () {
-                  context.read<ProfileCubit>().updateUser(txtName.text.trim());
+              BlocConsumer<ProfileCubit, ProfileState>(
+                listener: (context, state) {
+                  if (state is ProfileUpdateSuccess) {
+                    // Show success message when profile is updated
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Profile updated successfully!')),
+                    );
+                  } else if (state is ProfileUpdateFailure) {
+                    // Show error message if something goes wrong
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(state.error)),
+                    );
+                  }
                 },
-              )
+                builder: (context, state) {
+                  if (state is ProfileLoading) {
+                    return Center(
+                      child: LoadingAnimationWidget.fourRotatingDots(
+                        color: const Color(0xffD227A9),
+                        size: 40,
+                      ),
+                    );
+                  }
+
+                  return CustomButton(
+                    text: "Save",
+                    onPressed: () {
+                      if (state.name == txtName.text &&
+                          state.imageFile == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("No changes made")),
+                        );
+                      } else {
+                        context
+                            .read<ProfileCubit>()
+                            .updateUser(txtName.text.trim());
+                      }
+                    },
+                  );
+                },
+              ),
             ],
           ),
         ),
