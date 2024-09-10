@@ -18,3 +18,31 @@ final class ChatFailure extends ChatState {
   // TODO: implement props
   List<Object?> get props => [error];
 }
+
+final class ChatMessageSelected extends ChatState {
+  final String messageId;
+
+  const ChatMessageSelected(this.messageId);
+
+  @override
+  List<Object> get props => [messageId];
+}
+
+final class ChatMessageDeleted extends ChatState {
+  final String messageId;
+
+  const ChatMessageDeleted(this.messageId);
+
+  @override
+  List<Object> get props => [messageId];
+}
+
+final class ChatMessageUpdated extends ChatState {
+  final String messageId;
+  final String newMessage;
+
+  const ChatMessageUpdated(this.messageId, this.newMessage);
+
+  @override
+  List<Object> get props => [messageId, newMessage];
+}

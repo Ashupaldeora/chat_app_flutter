@@ -291,4 +291,69 @@ class ChatServices {
     // Commit the batch
     await batch.commit();
   }
+
+  Future<void> deleteMessage(String messageId, String receiverId) async {
+    try {
+      final userId = FirebaseAuth.instance.currentUser!.uid;
+      WriteBatch batch = FirebaseFirestore.instance.batch();
+
+      // Define document references
+      DocumentReference senderMessageRef = FirebaseFirestore.instance
+          .collection("users")
+          .doc(userId)
+          .collection("chats")
+          .doc(receiverId)
+          .collection("messages")
+          .doc(messageId);
+
+      DocumentReference receiverMessageRef = FirebaseFirestore.instance
+          .collection("users")
+          .doc(receiverId)
+          .collection("chats")
+          .doc(userId)
+          .collection("messages")
+          .doc(messageId);
+
+      // Delete messages
+      batch.delete(senderMessageRef);
+      batch.delete(receiverMessageRef);
+
+      await batch.commit();
+    } catch (e) {
+      throw Exception("Error deleting message: $e");
+    }
+  }
+
+  Future<void> updateMessage(
+      String messageId, String newMessage, String receiverId) async {
+    try {
+      final userId = FirebaseAuth.instance.currentUser!.uid;
+      WriteBatch batch = FirebaseFirestore.instance.batch();
+
+      // Define document references
+      DocumentReference senderMessageRef = FirebaseFirestore.instance
+          .collection("users")
+          .doc(userId)
+          .collection("chats")
+          .doc(receiverId)
+          .collection("messages")
+          .doc(messageId);
+
+      DocumentReference receiverMessageRef = FirebaseFirestore.instance
+          .collection("users")
+          .doc(receiverId)
+          .collection("chats")
+          .doc(userId)
+          .collection("messages")
+          .doc(messageId);
+
+      // Update message
+      batch.update(senderMessageRef, {'message': newMessage});
+      batch.update(receiverMessageRef, {'message': newMessage});
+
+      await batch.commit();
+    } catch (e) {
+      throw Exception("Error updating message: $e");
+    }
+  }
 }
