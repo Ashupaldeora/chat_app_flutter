@@ -21,11 +21,13 @@ final class ChatFailure extends ChatState {
 
 final class ChatMessageSelected extends ChatState {
   final String messageId;
+  final bool isSender;
+  final String message;
 
-  const ChatMessageSelected(this.messageId);
+  const ChatMessageSelected(this.messageId, this.isSender, this.message);
 
   @override
-  List<Object> get props => [messageId];
+  List<Object> get props => [messageId, isSender, message];
 }
 
 final class ChatMessageDeleted extends ChatState {
@@ -45,4 +47,10 @@ final class ChatMessageUpdated extends ChatState {
 
   @override
   List<Object> get props => [messageId, newMessage];
+}
+
+final class ChatMessageDeselected extends ChatState {
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
 }

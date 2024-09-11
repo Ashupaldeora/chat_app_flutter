@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 
 import 'package:chat_app_flutter/services/chat/chat_services.dart';
 import 'package:chat_app_flutter/services/firestore/firestore_services.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:snappable_thanos/snappable_thanos.dart';
 
 part 'chat_event.dart';
 
@@ -14,6 +18,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<ChatSelectMessage>(_messageSelected);
     on<ChatDeleteMessage>(_messageDeleted);
     on<ChatUpdateMessage>(_messageUpdated);
+    on<ChatDeselectMessage>(_deselectMessage);
   }
 
   Future<void> _textMessageSent(
@@ -26,14 +31,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   Future<void> _messageSelected(
       ChatSelectMessage event, Emitter<ChatState> emit) async {
     // Emit the selected message ID
-    emit(ChatMessageSelected(event.messageId));
+    emit(ChatMessageSelected(event.messageId, event.isSender, event.message));
   }
 
   Future<void> _messageDeleted(
       ChatDeleteMessage event, Emitter<ChatState> emit) async {
     try {
       await ChatServices.chatServices
-          .deleteMessage(event.messageId, event.receiverId);
+          .deleteMessage(event.messageId, event.receiverId, event.isSender);
       emit(ChatMessageDeleted(event.messageId));
     } catch (e) {
       emit(ChatFailure(e.toString()));
@@ -43,8 +48,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   Future<void> _messageUpdated(
       ChatUpdateMessage event, Emitter<ChatState> emit) async {
     try {
-      await ChatServices.chatServices
-          .updateMessage(event.messageId, event.newMessage, event.receiverId);
+      await ChatServices.chatServices.editMessage(
+          messageId: event.messageId,
+          newMessage: event.newMessage,
+          receiverId: event.receiverId,
+          isSender: event.isSender);
       emit(ChatMessageUpdated(
         event.messageId,
         event.newMessage,
@@ -52,5 +60,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     } catch (e) {
       emit(ChatFailure(e.toString()));
     }
+  }
+
+  void _deselectMessage(ChatDeselectMessage event, Emitter<ChatState> emit) {
+    emit(ChatMessageDeselected());
+  }
+
+  @override
+  void onChange(Change<ChatState> change) {
+    // TODO: implement onChange
+    super.onChange(change);
+    log(change.toString());
   }
 }

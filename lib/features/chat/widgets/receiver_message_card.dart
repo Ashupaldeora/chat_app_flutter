@@ -47,9 +47,6 @@ class ReceiverMessageCard extends StatelessWidget {
                     .copyWith(fontSize: 9.sp, fontWeight: FontWeight.w500),
               ),
             ),
-            SizedBox(
-              height: 10.h,
-            )
           ],
         ),
       ),

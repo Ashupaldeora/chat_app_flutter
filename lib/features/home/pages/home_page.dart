@@ -5,6 +5,7 @@ import 'package:chat_app_flutter/features/home/model/home_model.dart';
 import 'package:chat_app_flutter/features/home/cubit/visibility_cubit/visibility_cubit.dart';
 import 'package:chat_app_flutter/services/authentication/auth_services.dart';
 import 'package:chat_app_flutter/services/chat/chat_services.dart';
+import 'package:chat_app_flutter/services/firebase_messaging/firebase_messaging.dart';
 import 'package:chat_app_flutter/services/firestore/firestore_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../../config/route/route_names.dart';
-import '../../chat/widgets/custom_bottom_sheet.dart';
+
 import '../widgets/custom_user_tile.dart';
 
 class HomePage extends StatefulWidget {
@@ -34,6 +35,7 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      FMessaging.requestNotificationPermissions();
       if (AuthServices.authServices.isNewUser) {
         Future.delayed(const Duration(milliseconds: 700), () {
           if (FireStoreService.currentUserData != null) {
@@ -69,9 +71,7 @@ class _HomePageState extends State<HomePage> {
           ),
           actions: [
             IconButton(
-                onPressed: () {
-                  showProfileDialog(context);
-                },
+                onPressed: () {},
                 icon: Icon(
                   Icons.add,
                   color: Colors.white,
@@ -210,8 +210,8 @@ class _HomePageState extends State<HomePage> {
                                           "receiverId": homeChatDetails.userId,
                                           "receiverName": homeChatDetails.name,
                                         });
-                                    CustomBottomSheet.show(context, txtMessage,
-                                        homeChatDetails.userId);
+                                    // CustomBottomSheet.show(context, txtMessage,
+                                    //     homeChatDetails.userId);
                                   },
                                 ),
                                 SizedBox(

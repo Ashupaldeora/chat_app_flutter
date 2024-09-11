@@ -292,12 +292,13 @@ class ChatServices {
     await batch.commit();
   }
 
-  Future<void> deleteMessage(String messageId, String receiverId) async {
+  Future<void> deleteMessage(
+      String messageId, String receiverId, bool isSender) async {
     try {
       final userId = FirebaseAuth.instance.currentUser!.uid;
       WriteBatch batch = FirebaseFirestore.instance.batch();
 
-      // Define document references
+      // Define document references for message deletion
       DocumentReference senderMessageRef = FirebaseFirestore.instance
           .collection("users")
           .doc(userId)
@@ -314,46 +315,138 @@ class ChatServices {
           .collection("messages")
           .doc(messageId);
 
-      // Delete messages
-      batch.delete(senderMessageRef);
-      batch.delete(receiverMessageRef);
+      // If the message belongs to the sender, delete from both sender and receiver collections
+      if (isSender) {
+        batch.delete(senderMessageRef);
+        batch.delete(receiverMessageRef);
+      } else {
+        // If the message belongs to the receiver, only delete it from the sender's collection
+        batch.delete(senderMessageRef);
+      }
 
+      // Commit the batch first to ensure deletion
       await batch.commit();
+
+      // Now after the deletion, fetch the last messages for both sender and receiver
+      final senderLastMessageSnapshot = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userId)
+          .collection("chats")
+          .doc(receiverId)
+          .collection("messages")
+          .orderBy('timeSent', descending: true)
+          .limit(1)
+          .get();
+
+      final receiverLastMessageSnapshot = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(receiverId)
+          .collection("chats")
+          .doc(userId)
+          .collection("messages")
+          .orderBy('timeSent', descending: true)
+          .limit(1)
+          .get();
+
+      WriteBatch updateBatch = FirebaseFirestore.instance.batch();
+
+      // Define document references for last message updates
+      DocumentReference senderChatDoc = FirebaseFirestore.instance
+          .collection("users")
+          .doc(userId)
+          .collection("chats")
+          .doc(receiverId);
+
+      DocumentReference receiverChatDoc = FirebaseFirestore.instance
+          .collection("users")
+          .doc(receiverId)
+          .collection("chats")
+          .doc(userId);
+
+      // Update lastMessage for sender
+      if (senderLastMessageSnapshot.docs.isNotEmpty) {
+        final lastMessage = senderLastMessageSnapshot.docs.first;
+        updateBatch.update(senderChatDoc, {
+          'lastMessage': lastMessage['message'],
+          'lastMessageTime': lastMessage['timeSent'],
+        });
+      } else {
+        // If no messages are left, set default values
+        updateBatch.update(senderChatDoc, {
+          'lastMessage': 'No messages',
+          'lastMessageTime': null,
+        });
+      }
+
+      // Update lastMessage for receiver only if the deleted message belonged to the sender
+      if (isSender) {
+        if (receiverLastMessageSnapshot.docs.isNotEmpty) {
+          final lastMessage = receiverLastMessageSnapshot.docs.first;
+          updateBatch.update(receiverChatDoc, {
+            'lastMessage': lastMessage['message'],
+            'lastMessageTime': lastMessage['timeSent'],
+          });
+        } else {
+          // If no messages are left, set default values
+          updateBatch.update(receiverChatDoc, {
+            'lastMessage': 'No messages',
+            'lastMessageTime': null,
+          });
+        }
+      }
+
+      // Commit the second batch for updating the last message
+      await updateBatch.commit();
     } catch (e) {
-      throw Exception("Error deleting message: $e");
+      throw Exception("Error deleting message and updating last message: $e");
     }
   }
 
-  Future<void> updateMessage(
-      String messageId, String newMessage, String receiverId) async {
+  Future<void> editMessage({
+    required String messageId,
+    required String receiverId,
+    required String newMessage,
+    required bool isSender,
+  }) async {
     try {
       final userId = FirebaseAuth.instance.currentUser!.uid;
-      WriteBatch batch = FirebaseFirestore.instance.batch();
 
-      // Define document references
-      DocumentReference senderMessageRef = FirebaseFirestore.instance
-          .collection("users")
-          .doc(userId)
-          .collection("chats")
-          .doc(receiverId)
-          .collection("messages")
-          .doc(messageId);
+      if (isSender) {
+        // If the user is the sender, proceed with editing the message
+        WriteBatch batch = FirebaseFirestore.instance.batch();
 
-      DocumentReference receiverMessageRef = FirebaseFirestore.instance
-          .collection("users")
-          .doc(receiverId)
-          .collection("chats")
-          .doc(userId)
-          .collection("messages")
-          .doc(messageId);
+        // Define document references for message updates
+        DocumentReference senderMessageRef = FirebaseFirestore.instance
+            .collection("users")
+            .doc(userId)
+            .collection("chats")
+            .doc(receiverId)
+            .collection("messages")
+            .doc(messageId);
 
-      // Update message
-      batch.update(senderMessageRef, {'message': newMessage});
-      batch.update(receiverMessageRef, {'message': newMessage});
+        DocumentReference receiverMessageRef = FirebaseFirestore.instance
+            .collection("users")
+            .doc(receiverId)
+            .collection("chats")
+            .doc(userId)
+            .collection("messages")
+            .doc(messageId);
 
-      await batch.commit();
+        // Update the message content for both sender and receiver
+        Map<String, dynamic> updatedMessageData = {
+          'message': newMessage,
+        };
+
+        batch.update(senderMessageRef, updatedMessageData);
+        batch.update(receiverMessageRef, updatedMessageData);
+
+        // Commit the batch to update the message
+        await batch.commit();
+      } else {
+        throw Exception("You can only edit your own messages.");
+      }
     } catch (e) {
-      throw Exception("Error updating message: $e");
+      throw Exception("Error editing message: $e");
     }
   }
 }

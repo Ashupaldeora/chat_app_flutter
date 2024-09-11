@@ -5,8 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../chat/widgets/custom_bottom_sheet.dart';
-
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
 
@@ -97,7 +95,6 @@ class _SearchPageState extends State<SearchPage> {
                             "receiverId": user.uid,
                             "receiverName": user.name,
                           });
-                          CustomBottomSheet.show(context, txtMessage, user.uid);
                         },
                         leading: CircleAvatar(
                           radius: 22.r,

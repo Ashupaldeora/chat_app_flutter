@@ -30,12 +30,12 @@ class Routes {
       case RoutesName.chat:
         Map<String, dynamic> args = settings.arguments as Map<String, dynamic>;
         final String hero = args['hero'];
-        final String receiverUser = args['receiverId'];
+        final String receiverUserId = args['receiverId'];
         final String receiverName = args['receiverName'];
         return MaterialPageRoute(
           builder: (context) => ChatScreen(
             hero: hero,
-            receiverUser: receiverUser,
+            receiverUserId: receiverUserId,
             receiverName: receiverName,
           ),
         );

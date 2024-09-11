@@ -1,5 +1,5 @@
 class UserModel {
-  final String email, profilePic, name, uid;
+  final String email, profilePic, name, uid, deviceToken;
 
   final bool isOnline;
   final List<String> searchableKeywords;
@@ -11,6 +11,7 @@ class UserModel {
     required this.uid,
     required this.isOnline,
     required this.searchableKeywords,
+    required this.deviceToken,
   });
 
   Map<String, dynamic> toMap() {
@@ -20,7 +21,8 @@ class UserModel {
       'name': name,
       'uid': uid,
       'isOnline': isOnline,
-      'searchableKeywords': searchableKeywords
+      'searchableKeywords': searchableKeywords,
+      'deviceToken': deviceToken
     };
   }
 
@@ -34,6 +36,7 @@ class UserModel {
       searchableKeywords: List<String>.from(
         map['searchableKeywords'] ?? <dynamic>[],
       ),
+      deviceToken: map['deviceToken'],
     );
   }
 
@@ -44,6 +47,7 @@ class UserModel {
     String? uid,
     bool? isOnline,
     List<String>? searchableKeywords,
+    String? deviceToken,
   }) {
     return UserModel(
       email: email ?? this.email,
@@ -52,6 +56,7 @@ class UserModel {
       uid: uid ?? this.uid,
       isOnline: isOnline ?? this.isOnline,
       searchableKeywords: searchableKeywords ?? this.searchableKeywords,
+      deviceToken: deviceToken ?? this.deviceToken,
     );
   }
 }

@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:chat_app_flutter/constants.dart';
 import 'package:chat_app_flutter/features/authentication_screen/model/user_model.dart';
 import 'package:chat_app_flutter/services/authentication/auth_services.dart';
+import 'package:chat_app_flutter/services/firebase_messaging/firebase_messaging.dart';
 import 'package:chat_app_flutter/services/firestore/firestore_services.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,13 +29,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (user != null) {
         List<String> keywords = generateSearchKeywords(event.name);
         final name = capitalizeWords(event.name);
+        String deviceToken = await FMessaging.getDeviceToken();
         UserModel userData = UserModel(
             email: user.email!,
             profilePic: Constants.defaultProfileImage,
             name: name,
             uid: user.uid,
             isOnline: true,
-            searchableKeywords: keywords);
+            searchableKeywords: keywords,
+            deviceToken: deviceToken);
         FireStoreService().saveUserData(userData);
         return emit(AuthSuccess());
       }
@@ -70,13 +73,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (user != null) {
         List<String> keywords = generateSearchKeywords(user.displayName!);
         final name = capitalizeWords(user.displayName!);
+        String deviceToken = await FMessaging.getDeviceToken();
         UserModel userData = UserModel(
             email: user.email!,
             profilePic: user.photoURL!,
             name: name,
             uid: user.uid,
             isOnline: true,
-            searchableKeywords: keywords);
+            searchableKeywords: keywords,
+            deviceToken: deviceToken);
         FireStoreService().saveUserData(userData);
         return emit(AuthSuccess());
       } else {

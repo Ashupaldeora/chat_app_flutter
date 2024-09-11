@@ -16,10 +16,12 @@ class MyMessageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Padding(
-        padding: EdgeInsets.only(right: 10.r),
+    return Padding(
+      padding: EdgeInsets.only(
+        right: 10.w,
+      ),
+      child: Align(
+        alignment: Alignment.centerRight,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisSize: MainAxisSize.min,
@@ -69,9 +71,6 @@ class MyMessageCard extends StatelessWidget {
                 )
               ],
             ),
-            SizedBox(
-              height: 10.h,
-            )
           ],
         ),
       ),
