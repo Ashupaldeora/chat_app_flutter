@@ -16,15 +16,16 @@ This is a real-time multi-user chat application built using Flutter, BLoC, and F
 ## Screenshots
 
 <div align="center">
-   <img src="https://github.com/user-attachments/assets/d9e11d92-2c0d-4a27-b703-aca25feb7177" height="600px" hspace=20></img>
+   <img src="https://github.com/user-attachments/assets/2b03eb0b-df7c-4a8c-b1df-5f611012e868" height="600px" hspace=20></img>
    <img src="https://github.com/user-attachments/assets/e46367d9-3f9c-40cc-b499-634ea953e4fb" height="600px" ></img>
 </div>
 
 ### 
 
 <div align="center">
-   <img src="https://github.com/user-attachments/assets/3b417b51-a6ca-4411-91b7-dc5aa9e896fb" height="600px" hspace=20></img>
-  <img src="https://github.com/user-attachments/assets/2b03eb0b-df7c-4a8c-b1df-5f611012e868" height="600px" ></img>
+    <img src="https://github.com/user-attachments/assets/d9e11d92-2c0d-4a27-b703-aca25feb7177" height="600px" hspace=20></img>
+   <img src="https://github.com/user-attachments/assets/3b417b51-a6ca-4411-91b7-dc5aa9e896fb" height="600px" ></img>
+  
 </div>
 
 ### 
