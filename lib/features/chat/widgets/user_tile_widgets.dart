@@ -34,7 +34,7 @@ Widget buildActionButtons(
       bool isMessageSelected = state is ChatMessageSelected;
 
       return SizedBox(
-        width: 100,
+        width: 130,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -57,6 +57,7 @@ Widget buildActionButtons(
 Widget buildDeleteButton(ChatState state, BuildContext context,
     TextEditingController txtMessage, FocusNode _focusNode) {
   return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
     children: [
       InkWell(
         onTap: () async {
@@ -83,28 +84,22 @@ Widget buildDeleteButton(ChatState state, BuildContext context,
           child: Image.asset("assets/delete.png", color: Colors.white),
         ),
       ),
-      SizedBox(
-        width: 10.w,
-      ),
       if ((state as ChatMessageSelected).isSender)
-        InkWell(
-          onTap: () {
+        MaterialButton(
+          padding: EdgeInsets.zero,
+          color: Colors.white,
+          // height: 30.h,
+          minWidth: 30.w,
+          shape: CircleBorder(),
+          onPressed: () {
             final message = (state).message;
             txtMessage.text = message;
             FocusScope.of(context).requestScopeFocus();
             log("focused ??");
           },
-          child: Container(
-            height: 38,
-            width: 38,
-            // padding: const EdgeInsets.all(10),
-            alignment: Alignment.center,
-            decoration: const BoxDecoration(
-                shape: BoxShape.circle, color: Colors.white),
-            child: Icon(
-              Icons.edit,
-              color: Colors.black,
-            ),
+          child: Icon(
+            Icons.edit,
+            color: Colors.black,
           ),
         ),
     ],

@@ -16,6 +16,13 @@ class _SearchPageState extends State<SearchPage> {
   TextEditingController txtMessage = TextEditingController();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    context.read<SearchCubit>().loadUsers();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(

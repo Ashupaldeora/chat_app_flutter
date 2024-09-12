@@ -11,7 +11,7 @@ import 'package:chat_app_flutter/services/status/status_services.dart';
 import 'package:chat_app_flutter/shared/blocs/auth/auth_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,9 +21,15 @@ import 'config/route/route.dart';
 import 'features/home/pages/home_page.dart';
 import 'features/profile/cubit/profile_cubit/profile_cubit.dart';
 
+@pragma('vm:entry-point')
+Future<void> _firebaseBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
   final appLifecycleObserver = AppLifecycleObserver();
   appLifecycleObserver.startListening();
 
@@ -58,8 +64,7 @@ class MyApp extends StatelessWidget {
           create: (context) => ChatBloc(),
         ),
         BlocProvider(
-          create: (context) =>
-              SearchCubit(FirebaseAuth.instance.currentUser!.uid)..loadUsers(),
+          create: (context) => SearchCubit()..loadUsers(),
         ),
         BlocProvider(
           create: (context) => ProfileCubit(),

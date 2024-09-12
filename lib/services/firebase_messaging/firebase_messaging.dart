@@ -15,9 +15,9 @@ class FMessaging {
         ServiceAccountCredentials.fromJson({
           "type": "service_account",
           "project_id": "chat-app-5a73b",
-          "private_key_id": "0907b88960ce03115eabc4ddf1812b644fc599c3",
+          "private_key_id": "bc1b49f7521693b5f18be4c4421e171cfcd231ae",
           "private_key":
-              "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQC0Irj4VN7XMans\ng8F7Lw+l33FlKgCylTku2cahn7Nx9jqWoPSoZZfbeUF7qnaP8cgQ+5M7e+wxLtkr\nHEAnFzFB3sNGJhc3Hhu3bWCKm6xs/9V2gmsJTq+jeVEvx8DUqZ0wuvK4dZwskHCi\nBj73v05Q18QioBBDBvLJs+2GCa3jHuJUqM8rtTMrzQsiWaGIG3Yk5FkRh+ijG0dx\nmWrM2RLQnhi9FRHpU/R+laaktn6Lu6035MGzDglswPEaRg1tye4gu2Kmtmgu0350\nwg7j7grwlJl5yUM9qjARM+A3xQlaF0/T3Zj6SRUpT1g/OUo2tfcShyhejXDfYnUJ\nGhQ08JodAgMBAAECggEAAabj3Vsh5AVPkpyutIt88D95Ub0t3nVh3d0fZjIJujzQ\n0rrNI5Iy709QW2r3xWApPoagFgaP5u+QDEYpDHK4/+qkDcuhoN7E0EzPetXsod9C\nvOB7TM2M7MnbBb4mNY0MpPrB6REjCoGUltfJ0gnOFQ21fb/MBmFU7qaYwgbqsk99\nPv0B46pImF8iqWyZklxXA8kcv3QoMD6DuBUuW84YjexDe/dFLTuWX5N2b1wol5au\nepMMtU4HgJZbwNtN14GtSFYfR26jI0fNNtJX1P+GZ1EXECf9XgCuLvVkFOlkDaTd\nKg0ab+yLUN6jdvKqu7MGQU1+PH7oBDLQH6oADF+yoQKBgQDmq7GHsTcEZEtrb4Rm\n1Fl7c2Nia3OS9LX16qqpYOUJccdn92ykb5SA595/Fi511z6I22ycOmG05raqPiKN\nw4MAV+8GwyonvrbMMtUMbJH2DUkFR+c/uhgzll3nZQ84MTrFjtdIFHD4QyZDsfMi\nucVzRDvCvWc+xmHKxN385zNgCQKBgQDH6nSQB9Y+r8R8GxSy1rlM2X1UHj1hAtya\nHHxpQSn64UJIvatZPcnXnnPZQZs48iLPfJ3vplzCKGOVJPPrg0tHOshDX4l0A4TY\nVAEtV6/S7pX1olAdExjvbc/9zj/XiLyszuuy2zQEcXe9aCjmKSEX5kFe0aXDuvBX\nbX/wzumGdQKBgQCJSE3UEChKONaaDjiiamcHDdlsTb7vCyzwOsVvIPeu80RWH+9M\nvguH3HeS80SbZYsWMGEnaaeU3mqAT5KJBH8GyU68m5KPLPXl+arKRiNoaOe4eN6s\nErksmqUwffjc3I+53BVMFL5XQr+XMmUdmaplu4pFkCvONIsm/puPVJpC4QKBgQCy\nb0qwz73jX8DRQN6drVfhBvJ9JSyFrSc3iptk2tvcaDhgcqJA2gyRHoWqcYtZLY3y\ngfj50RRT2/beRQhNundzUT00HU6zNPzalUgjr3NoorlIcCJvgP8tnWca039aIlq9\nJ0dq8YohOSG19gUjQayfB05rklYROIaSklKyngwDjQKBgQCnCFZTOMtNBZfmInCE\nZDjVoiG2IO1FR3LChw4c2X+frdSupfraQ4PwMABmOqb7M5uUuzNbqB1VzW/dVQD0\nqLjjaZUAujtm5eYT/Bnc/qgWk1epXP9Vpt1n1OuvJ8nk6R1YMQ3DJ40Qllm2Svn9\ntxHy4f72/G25h1f+h0aqCW3X9Q==\n-----END PRIVATE KEY-----\n",
+              "-----BEGIN PRIVATE KEY-----\nMIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQC2V8egULdjBAZx\nkGtu0qz1XuNPKo/N3JkUwXD9f5Hup30o287e/yyD1ZS5/NPYVQbbOJE9g8FljgqZ\nA34gN+VUcE+fgrceun8RwN+K0KkiN7TsKgoN4DTTHSjWSyd6K+pindhZlTDB8dZZ\n/gqmkdo6piBKDTo0WlvI/9JH0rg4voK2NjJS8wpO2itCu+QU5fSFLJAbkj20VZeF\nnUnGKAkJnMvGTgvVQoiX34ttzH3to/gEl+q7Fk0Oe0LawchBTxYhVyabyRUGxPW+\njtNk9SBAq6555B57vNzZ/cAxRSyuwDzhCGLIXbZbgZTYZB0x27ALxlpli1EnXcuI\nZ7glu4yJAgMBAAECgf8tSGkUrOdpr5Y3pXdlwK4Mf6MaghKJt/Fjk0HCACpsIfXM\nXl19veEhpgf0CVHJMWP23qEUGiB42eTPnwarw1Ti6S/kqyzO0d7rNG84KRW4r4HC\nqG/1y+bWWFf6c0qv1iidHrUIgoCCBsNEUD8uFtwLtJq80Ok24NykoW8LrPtoYYuY\n8S4ngHZuRYsnlj3z6rMWWcpmjX52vRAzK52NTnnNNP/5e0hYnmbUI0PDqtusfsn5\naStzKsjCaH1hQnAF7pARXnlFsK13l7OZv1mfwHBWplXHa9v4WZItau0Pr9U/0+Nb\n+NbwVd9DGfUkstIAd16N4ZOpxIdTGK8unAYWqyECgYEA4Jap5HoessGmd+TBhrQu\nPdooRVbbt0OChU0LFafgzMUYBlTPfF+dY8Wp58Jdb3paUmYRRPd3aj/5pkA3+9/U\nOR9TpxYCIR8fq/oOsT/zGmblwMGQhfYzVdfy+kp2ysoH7ozYZdiAfvu5CqNOjxAq\nh+37I7mSYn+vFjEYNFA9GT0CgYEAz9iFgwalr62hn3gs3t2ECMWJa5399z5ZAIgq\nAlqBNKILLv4TfR4v6753ZhPKgZs62Wr19gE6IVVMBHFUHKFlOYA2wzl23W4APxso\nWtpJhKIkGd+fPb+CWHgU+O4Zm2DW3ivAZGdZlbsKKBfXeIU0iv4oZeYCaOobg+Y8\nBFFdPT0CgYBmPrEhvybyoo6yzoX8WVMj/YmP57cne6iUHzsIpOEG2EPTvhCnwq/Y\nmEh9plL7SWyNTsJV74OB75YsRdg25vOq/cQLsU1O3uiAVtsRfteiEW5Pjs/I7Qj5\n79JCeFwUfl2WELEDzMjTBq57VVWSc/2o3IMVBIrMJO0E4VzvlAf80QKBgD1HPwXE\nXfEPpgkYK1KByL21T7C04f2VGjR38LrE6DcWV2nBawmGbuZ4P0ePKjNQCuezC1U+\nQ180gLcGmp/eTbPIQ10Hgi4CknwIi7tNhENgcnhWX+KapdljfftuZ4pR4Meb6psv\nhVAJ1xK/BL35t+YKzOpOCAPakcYviR5UxsKZAoGBAIUFTqQZhuLX3pJYd6x7cdru\nDzrOdSBuzSYJYqGy66UqZpxX0yUPYbGIdQ6bBdcWzMs2rTC+CUJtuRLi4T9CewNS\n6kdHXdtvwA5WLDy5jsxVyWV50hV8py1PeCHGR/37zGVd+m1JH2dGoyqgyp2OULyg\n2ZCerBBIzNZb8taur5sb\n-----END PRIVATE KEY-----\n",
           "client_email":
               "firebase-adminsdk-ddk28@chat-app-5a73b.iam.gserviceaccount.com",
           "client_id": "110309431747011122026",
@@ -71,14 +71,5 @@ class FMessaging {
     String? token = await firebaseMessaging.getToken();
     print("token=> $token");
     return token!;
-  }
-
-  static void firebaseInit() {
-    FirebaseMessaging.onMessage.listen(
-      (message) {
-        print(message.notification!.title);
-        print(message.notification!.body);
-      },
-    );
   }
 }

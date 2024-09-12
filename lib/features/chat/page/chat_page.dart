@@ -1,7 +1,9 @@
 import 'dart:developer';
 
 import 'package:chat_app_flutter/features/authentication_screen/model/user_model.dart';
+import 'package:chat_app_flutter/services/firebase_messaging/api_servies.dart';
 import 'package:chat_app_flutter/services/firestore/firestore_services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -306,7 +308,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     if (_bottomSheetController.status == AnimationStatus.completed) {
       await _bottomSheetController.reverse();
       context.read<VisibilityCubit>().showTitle();
-      log("heyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
     }
     return true; // Always return true to allow navigation
   }
@@ -353,7 +354,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   Widget _buildChatHeader() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 25.h),
+      padding: EdgeInsets.only(left: 15.w, bottom: 25.h, top: 25.h, right: 5.w),
       decoration: BoxDecoration(
         color: Theme.of(context).appBarTheme.backgroundColor,
         boxShadow: [
@@ -459,7 +460,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                         color: Colors.grey.shade500,
                                       )),
                                   IconButton(
-                                      onPressed: () {
+                                      onPressed: () async {
                                         if (state is ChatMessageSelected) {
                                           final id = (state).messageId;
                                           final isSender = (state).isSender;
@@ -470,6 +471,15 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                                   widget.receiverUserId,
                                                   isSender));
                                         } else {
+                                          // Check if user is online before sending
+                                          final onlineSnapshot =
+                                              await FireStoreService()
+                                                  .getUserOnlineStatus(
+                                                      widget.receiverUserId)
+                                                  .first;
+                                          final isOnline =
+                                              onlineSnapshot['isOnline']
+                                                  as bool;
                                           final message =
                                               txtMessage.text.trim();
                                           if (message.isNotEmpty) {
@@ -479,6 +489,17 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                                                         widget.receiverUserId,
                                                     message: txtMessage.text
                                                         .trim()));
+                                            if (!isOnline) {
+                                              ApiServices.apiServices
+                                                  .pushNotification(
+                                                      title:
+                                                          widget.receiverName,
+                                                      body: txtMessage.text
+                                                          .trim(),
+                                                      token: FireStoreService
+                                                          .receiverUserData!
+                                                          .deviceToken);
+                                            }
                                           }
                                         }
                                         txtMessage.clear();

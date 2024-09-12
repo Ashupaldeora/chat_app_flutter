@@ -35,7 +35,7 @@ class FireStoreService {
     print('Users retrieved: ${querySnapshot.docs.map((doc) => doc.data())}');
 
     return querySnapshot.docs
-        .map((doc) => UserModel.fromMap(doc.data() as Map<String, dynamic>))
+        .map((doc) => UserModel.fromMap(doc.data()))
         .toList();
   }
 
@@ -60,6 +60,10 @@ class FireStoreService {
         .doc(uid)
         .snapshots()
         .map((e) => UserModel.fromMap(e.data()!));
+  }
+
+  Stream<DocumentSnapshot> getUserOnlineStatus(String userId) {
+    return _db.collection('users').doc(userId).snapshots();
   }
 
   Future<void> updateProfile(String uid, String image) async {

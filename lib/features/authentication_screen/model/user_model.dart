@@ -36,7 +36,7 @@ class UserModel {
       searchableKeywords: List<String>.from(
         map['searchableKeywords'] ?? <dynamic>[],
       ),
-      deviceToken: map['deviceToken'],
+      deviceToken: map['deviceToken'] ?? "",
     );
   }
 
