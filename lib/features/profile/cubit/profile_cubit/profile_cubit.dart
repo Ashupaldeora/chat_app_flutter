@@ -102,7 +102,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   @override
   void onChange(Change<ProfileState> change) {
-    // TODO: implement onChanged
+    // TODO: implement onChange
     log("profile cubit: ${change.nextState.imageUrl}");
     super.onChange(change);
   }
