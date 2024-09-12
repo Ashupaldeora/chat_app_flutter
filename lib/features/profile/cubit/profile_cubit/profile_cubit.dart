@@ -23,7 +23,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     if (image != null) {
       return emit(ProfileState(
           imageFile: image,
-          imageUrl: FireStoreService.currentUserData!.profilePic));
+          imageUrl: FireStoreService.currentUserData!.profilePic,
+          name: FireStoreService.currentUserData!.name));
     }
   }
 
@@ -47,7 +48,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
     // Commit the batch write (this will update all chat documents in one go)
     await batch.commit();
-    return emit(ProfileState(imageUrl: url, imageFile: state.imageFile!));
+    return await fetchUserProfile();
   }
 
   // fetching user data for displaying at profile page
@@ -63,22 +64,21 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> updateUser(String name) async {
-    emit(ProfileLoading());
     String uid = FirebaseAuth.instance.currentUser!.uid;
-    if (name == state.name && state.imageFile == null) {
-      // No changes made, simply return
-
-      return;
-    }
+    String url;
     try {
-      String url = await StorageServices.storageServices
-          .uploadProfilePictureToStorage(state.imageFile!, "profile/$uid");
+      if (state.imageFile != null) {
+        url = await StorageServices.storageServices
+            .uploadProfilePictureToStorage(state.imageFile!, "profile/$uid");
+      } else {
+        url = state.imageUrl!;
+      }
       await FireStoreService().updateUserData(
         uid,
         url,
         name,
       );
-
+      log("download url $url");
       var chats = await FireStoreService().getUserChats(uid);
 
       // Start a Firestore batch
@@ -94,8 +94,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       // Commit the batch write (this will update all chat documents in one go)
       await batch.commit();
       // Emit success state with updated data
-      return emit(ProfileUpdateSuccess(
-          imageUrl: url, imageFile: state.imageFile, name: name));
+      return fetchUserProfile();
     } catch (e) {
       return emit(ProfileUpdateFailure(e.toString()));
     }
